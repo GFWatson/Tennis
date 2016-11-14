@@ -8,6 +8,8 @@ namespace tennisTest
 {
     class Program
     {
+        //check for win conditions
+        //can be game or set dependent on aim
         static bool checkWin(int sOne, int sTwo, int aim)
         {
             if (sOne >= aim && (sOne - sTwo) >= 2)
@@ -17,25 +19,69 @@ namespace tennisTest
             return false;
         }
 
+        //point scored
+        static void score(ref int x, ref int y, ref int xCurrent, ref int yCurrent, ref int xFirst, ref int yFirst, ref int xSecond, ref int ySecond, ref bool cServer, ref bool fSet, ref bool sSet)
+        {
+            x++;
+            //check to see if game is won
+            if (checkWin(x, y, 4))
+            {
+                xCurrent++;
+
+                //change server
+                if (cServer)
+                    cServer = false;
+                else
+                    cServer = true;
+
+                //check to see if set is won
+                if (checkWin(xCurrent, yCurrent, 6))
+                {
+                    //save scores, dependent on set number
+                    if (!fSet)
+                    {
+                        fSet = true;
+                        xFirst = xCurrent;
+                        yFirst = yCurrent;
+                        //reset values
+                        xCurrent = 0; yCurrent = 0;
+                    }
+                    else if (!sSet)
+                    {
+                        sSet = true;
+                        xSecond = xCurrent;
+                        ySecond = yCurrent;
+                        //reset values
+                        xCurrent = 0; yCurrent = 0;
+                    }
+
+                }
+                x = 0; y = 0;
+            }
+
+        }
+
+        //return values to 40 or advantage
         static void deuceSolver(ref int a, ref int b)
         {
-            if (a > 3 && a < b)
+            if (a > 3 && a < b) //advantage b
             {
                 a = 3;
                 b = 4;
             }
-            else if (b > 3 && b < a)
+            else if (b > 3 && b < a) //advantage a
             {
                 b = 3;
                 a = 4;
             }
-            else if (a > 3 && b > 3 && a == b)
+            else if (a > 3 && b > 3 && a == b) //deuce
             {
                 a = 3;
                 b = 3;
             }
         }
 
+        //take number input and return with tennis scoring system
         static string convertScore(int s)
         {
             switch (s)
@@ -76,85 +122,13 @@ namespace tennisTest
                 {
                     if (c == 'A')
                     {
-                        aScore++;
-                        //check to see if game is won
-                        if (checkWin(aScore, bScore, 4))
-                        {
-                            aCurrentSet++;
-
-                            //change server
-                            if (currentServerA)
-                                currentServerA = false;
-                            else
-                                currentServerA = true;
-
-                            //check to see if set is won
-                            if (checkWin(aCurrentSet, bCurrentSet, 6))
-                            {
-                                //save scores
-                                if (!firstSet)
-                                {
-                                    firstSet = true;
-                                    aFirst = aCurrentSet;
-                                    bFirst = bCurrentSet;
-                                    //reset values
-                                    aCurrentSet = 0; bCurrentSet = 0;
-                                }
-                                else if (!secondSet)
-                                {
-                                    secondSet = true;
-                                    aSecond = aCurrentSet;
-                                    bSecond = bCurrentSet;
-                                    //reset values
-                                    aCurrentSet = 0; bCurrentSet = 0;
-                                }
-
-                            }
-                            aScore = 0; bScore = 0;
-                        }
+                        score(ref aScore, ref bScore, ref aCurrentSet, ref bCurrentSet, ref aFirst, ref bFirst, ref aSecond, ref bSecond, ref currentServerA, ref firstSet, ref secondSet);
                     }
                     else if (c == 'B')
                     {
-                        bScore++;
-                        //check to see if game is won
-                        if (checkWin(bScore, aScore, 4))
-                        {
-                            bCurrentSet++;
-
-                            //change server
-                            if (currentServerA)
-                                currentServerA = false;
-                            else
-                                currentServerA = true;
-
-                            //check to see if set is won
-                            if (checkWin(bCurrentSet, aCurrentSet, 6))
-                            {
-                                //save scores
-                                if (!firstSet)
-                                {
-                                    firstSet = true;
-                                    aFirst = aCurrentSet;
-                                    bFirst = bCurrentSet;
-                                    //reset values
-                                    aCurrentSet = 0; bCurrentSet = 0;
-                                }
-                                else if (!secondSet)
-                                {
-                                    secondSet = true;
-                                    aSecond = aCurrentSet;
-                                    bSecond = bCurrentSet;
-                                    //reset values
-                                    aCurrentSet = 0; bCurrentSet = 0;
-                                }
-
-                            }
-                            aScore = 0; bScore = 0;
-                        }
-
+                        score(ref bScore, ref aScore, ref bCurrentSet, ref aCurrentSet, ref bFirst, ref aFirst, ref bSecond, ref aSecond, ref currentServerA, ref firstSet, ref secondSet);
                     }
-                }
-                //end of line loop
+                } //end of line loop
 
                 //deal with deuce and advantage scores
                 deuceSolver(ref aScore, ref bScore);
@@ -198,10 +172,9 @@ namespace tennisTest
                 firstSet = false; secondSet = false; currentServerA = true;
                 aScore = 0; bScore = 0; aCurrentSet = 0; bCurrentSet = 0; aFirst = 0; bFirst = 0; aSecond = 0; bSecond = 0;
 
-            }
-            //end of file loop
-            inputFile.Close();
+            } //end of file loop
 
+            inputFile.Close();
 
             //write output to file
             System.IO.StreamWriter outputFile = new System.IO.StreamWriter(outputFilePath);
