@@ -1,0 +1,6 @@
+C:\Users\gabri\Desktop\tennisTest\tennisTest\bin\Debug\tennisTest.exe.config
+C:\Users\gabri\Desktop\tennisTest\tennisTest\bin\Debug\tennisTest.exe
+C:\Users\gabri\Desktop\tennisTest\tennisTest\bin\Debug\tennisTest.pdb
+C:\Users\gabri\Desktop\tennisTest\tennisTest\obj\Debug\tennisTest.exe
+C:\Users\gabri\Desktop\tennisTest\tennisTest\obj\Debug\tennisTest.pdb
+C:\Users\gabri\Desktop\tennisTest\tennisTest\obj\Debug\tennisTest.csprojResolveAssemblyReference.cache
